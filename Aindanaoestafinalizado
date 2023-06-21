@@ -1,0 +1,98 @@
+using System;
+namespace AtvExtra
+{
+class Program
+{
+    static void Main(string[] args)
+    {
+        string[] palavras = { "maçã", "banana", "batata", "uva", "melon","pizza","pokémon","janela","terror","mágica ","luz","vida","volei","doce","tenis","parque","amor","raiva","triste","feliz","naruto","goku" }; // Lista de palavras disponíveis
+        string palavraEscolhida = ObterPalavraAleatoria(palavras); // Escolhe uma palavra aleatória
+        int tentativasRestantes = 5; // Número de tentativas restantes
+        string letrasCorretas = ""; // Armazena as letras corretas adivinhadas
+
+        // Cria uma string com underscores para representar as letras ocultas
+        string letrasOcultas = new string('_', palavraEscolhida.Length);
+
+        Console.WriteLine("Bem-vindo ao Jogo da Forca!");
+        Console.WriteLine("Adivinhe a palavra de 5 letras:");
+
+        // Loop principal do jogo
+        while (tentativasRestantes > 0)
+        {
+            Console.WriteLine("Palavra: " + letrasOcultas);
+            Console.WriteLine("Tentativas restantes: " + tentativasRestantes);
+
+            // Solicita ao usuário uma letra
+            Console.Write("Digite uma letra: ");
+            string entrada = Console.ReadLine();
+
+            if (entrada.Length != 1)
+            {
+                Console.WriteLine("Por favor, digite apenas uma letra por vez.");
+                continue;
+            }
+
+            char letra = entrada.ToLower()[0]; // Converte a entrada para minúsculas e obtém o primeiro caractere
+
+            if (!Char.IsLetter(letra))
+            {
+                Console.WriteLine("Por favor, digite apenas letras.");
+                continue;
+            }
+
+            // Verifica se a letra já foi adivinhada corretamente antes
+            if (letrasCorretas.Contains(letra))
+            {
+                Console.WriteLine("Você já adivinhou essa letra corretamente.");
+                continue;
+            }
+
+            // Verifica se a letra existe na palavra escolhida
+            bool letraEncontrada = false;
+            for (int i = 0; i < palavraEscolhida.Length; i++)
+            {
+                if (palavraEscolhida[i] == letra)
+                {
+                    // Atualiza a string de letras ocultas com a letra correta
+                    letrasOcultas = letrasOcultas.Substring(0, i) + letra + letrasOcultas.Substring(i + 1);
+                    letraEncontrada = true;
+                }
+            }
+
+            if (letraEncontrada)
+            {
+                Console.WriteLine("Parabéns! A letra está na palavra.");
+                letrasCorretas += letra;
+            }
+            else
+            {
+                Console.WriteLine("A letra não está na palavra. Tente novamente.");
+                tentativasRestantes--;
+            }
+
+            // Verifica se o jogador adivinhou todas as letras
+            if (letrasOcultas.Equals(palavraEscolhida))
+            {
+                Console.WriteLine("Parabéns! Você adivinhou a palavra correta: " + palavraEscolhida);
+                break;
+            }
+        }
+
+        // Verifica se o jogador perdeu
+        if (tentativasRestantes == 0)
+        {
+            Console.WriteLine("Você perdeu! A palavra correta era: " + palavraEscolhida);
+        }
+
+        Console.WriteLine("Obrigado por jogar!");
+    }
+
+    static string ObterPalavraAleatoria(string[] palavras)
+    {
+        Random random = new Random();
+        int indice = random.Next(0,22);
+        
+    }
+}
+}
+
