@@ -1,98 +1,87 @@
+
 using System;
-namespace AtvExtra
+
+namespace JogoDaForca
 {
-class Program
-{
-    static void Main(string[] args)
+    class Program
     {
-        string[] palavras = { "maçã", "banana", "batata", "uva", "melon","pizza","pokémon","janela","terror","mágica ","luz","vida","volei","doce","tenis","parque","amor","raiva","triste","feliz","naruto","goku" }; // Lista de palavras disponíveis
-        string palavraEscolhida = ObterPalavraAleatoria(palavras); // Escolhe uma palavra aleatória
-        int tentativasRestantes = 5; // Número de tentativas restantes
-        string letrasCorretas = ""; // Armazena as letras corretas adivinhadas
-
-        // Cria uma string com underscores para representar as letras ocultas
-        string letrasOcultas = new string('_', palavraEscolhida.Length);
-
-        Console.WriteLine("Bem-vindo ao Jogo da Forca!");
-        Console.WriteLine("Adivinhe a palavra de 5 letras:");
-
-        // Loop principal do jogo
-        while (tentativasRestantes > 0)
+        static void Main(string[] args)
         {
-            Console.WriteLine("Palavra: " + letrasOcultas);
-            Console.WriteLine("Tentativas restantes: " + tentativasRestantes);
+            string palavraSecreta = "PROGRAMACAO";
+            int maxTentativas = 6;
+            int tentativas = 0;
+            string letrasErradas = "";
 
-            // Solicita ao usuário uma letra
-            Console.Write("Digite uma letra: ");
-            string entrada = Console.ReadLine();
-
-            if (entrada.Length != 1)
+            char[] letrasDescobertas = new char[palavraSecreta.Length];
+            for (int i = 0; i < letrasDescobertas.Length; i++)
             {
-                Console.WriteLine("Por favor, digite apenas uma letra por vez.");
-                continue;
+                letrasDescobertas[i] = '_';
             }
 
-            char letra = entrada.ToLower()[0]; // Converte a entrada para minúsculas e obtém o primeiro caractere
-
-            if (!Char.IsLetter(letra))
+            while (true)
             {
-                Console.WriteLine("Por favor, digite apenas letras.");
-                continue;
-            }
+                Console.Clear();
+                Console.WriteLine("Jogo da Forca");
+                Console.WriteLine("==============");
+                Console.WriteLine();
 
-            // Verifica se a letra já foi adivinhada corretamente antes
-            if (letrasCorretas.Contains(letra))
-            {
-                Console.WriteLine("Você já adivinhou essa letra corretamente.");
-                continue;
-            }
+                Console.WriteLine("Palavra: " + new string(letrasDescobertas));
+                Console.WriteLine();
+                Console.WriteLine("Letras erradas: " + letrasErradas);
+                Console.WriteLine("Tentativas restantes: " + (maxTentativas - tentativas));
 
-            // Verifica se a letra existe na palavra escolhida
-            bool letraEncontrada = false;
-            for (int i = 0; i < palavraEscolhida.Length; i++)
-            {
-                if (palavraEscolhida[i] == letra)
+                if (tentativas >= maxTentativas)
                 {
-                    // Atualiza a string de letras ocultas com a letra correta
-                    letrasOcultas = letrasOcultas.Substring(0, i) + letra + letrasOcultas.Substring(i + 1);
-                    letraEncontrada = true;
+                    Console.WriteLine();
+                    Console.WriteLine("Você perdeu! A palavra secreta era: " + palavraSecreta);
+                    break;
                 }
-            }
 
-            if (letraEncontrada)
-            {
-                Console.WriteLine("Parabéns! A letra está na palavra.");
-                letrasCorretas += letra;
-            }
-            else
-            {
-                Console.WriteLine("A letra não está na palavra. Tente novamente.");
-                tentativasRestantes--;
-            }
+                if (new string(letrasDescobertas) == palavraSecreta)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Parabéns! Você acertou a palavra secreta.");
+                    break;
+                }
 
-            // Verifica se o jogador adivinhou todas as letras
-            if (letrasOcultas.Equals(palavraEscolhida))
-            {
-                Console.WriteLine("Parabéns! Você adivinhou a palavra correta: " + palavraEscolhida);
-                break;
+                Console.WriteLine();
+                Console.Write("Digite uma letra: ");
+                char letra = Console.ReadLine().ToUpper()[0];
+
+                if (!Char.IsLetter(letra))
+                {
+                    Console.WriteLine("Por favor, digite apenas uma letra.");
+                    Console.ReadKey();
+                    continue;
+                }
+
+                if (letrasErradas.Contains(letra.ToString()))
+                {
+                    Console.WriteLine("Você já tentou essa letra.");
+                    Console.ReadKey();
+                    continue;
+                }
+
+                bool letraEncontrada = false;
+
+                for (int i = 0; i < palavraSecreta.Length; i++)
+                {
+                    if (palavraSecreta[i] == letra)
+                    {
+                        letrasDescobertas[i] = letra;
+                        letraEncontrada = true;
+                    }
+                }
+
+                if (!letraEncontrada)
+                {
+                    tentativas++;
+                    letrasErradas += letra + " ";
+                }
+
+                Console.ReadKey();
             }
         }
-
-        // Verifica se o jogador perdeu
-        if (tentativasRestantes == 0)
-        {
-            Console.WriteLine("Você perdeu! A palavra correta era: " + palavraEscolhida);
-        }
-
-        Console.WriteLine("Obrigado por jogar!");
     }
-
-    static string ObterPalavraAleatoria(string[] palavras)
-    {
-        Random random = new Random();
-        int indice = random.Next(0,22);
-        
-    }
-}
 }
 
