@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+
+namespace AtvExJogoDaForca
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] palavras = { "gato", "cachorro", "elefante", "leão", "tigre", "girafa", "macaco", "rato", "zebra", "cavalo" };
+            Random random = new Random();
+            string palavraSelecionada = palavras[random.Next(palavras.Length)];
+            List<char> letrasCorretas = new List<char>();
+
+            Console.WriteLine("Bem-vindo ao Jogo da Forca!");
+            Console.WriteLine("Tente adivinhar a palavra.");
+
+            char[] palavraAdivinhada = new char[palavraSelecionada.Length];
+            for (int i = 0; i < palavraAdivinhada.Length; i++)
+            {
+                palavraAdivinhada[i] = '_';
+            }
+
+            int tentativasRestantes = 6;
+            while (tentativasRestantes > 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Palavra: {new string(palavraAdivinhada)}");
+                Console.WriteLine($"Tentativas restantes:{tentativasRestantes}");
+
+                Console.Write("Digite uma letra: ");
+                char letra = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+
+                if (letrasCorretas.Contains(letra))
+                {
+                    Console.WriteLine("Você já tentou essa letra. Tente novamente.");
+                    continue;
+                }
+
+                bool letraCorreta = false;
+                for (int i = 0; i < palavraSelecionada.Length; i++)
+                {
+                    if (palavraSelecionada[i] == letra)
+                    {
+                        palavraAdivinhada[i] = letra;
+                        letraCorreta = true;
+                    }
+                }
+
+                if (letraCorreta)
+                {
+                    letrasCorretas.Add(letra);
+                    if (new string(palavraAdivinhada) == palavraSelecionada)
+                    {
+                        Console.WriteLine("Parabéns! Você acertou a palavra.");
+                        break;
+                    }
+                }
+                else
+                {
+                    tentativasRestantes--;
+                    Console.WriteLine("Letra incorreta. Tente novamente.");
+                }
+            }
+
+            if (tentativasRestantes == 0)
+            {
+                Console.WriteLine($"Você perdeu! A palavra correta era:{palavraSelecionada});
+            }
+
+            Console.WriteLine("Pressione qualquer tecla para sair...");
+            Console.ReadKey();
+        }
+    }
+}
+
